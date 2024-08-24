@@ -470,6 +470,7 @@ RegisterNetEvent('lockpicks:UseLockpick', function(isAdvanced)
             Wait(10)
             count = count + 1
         end
+	LockpickAnim()
         Wait(1800)
         -- Unlock the door
         TriggerServerEvent('qb-doorlock:server:updateState', closestDoor.id, false, false, true, false)
@@ -883,3 +884,17 @@ CreateThread(function()
 		Wait(sleep)
 	end
 end)
+
+function LockpickAnim()
+    local Player = PlayerPedId()
+    FreezeEntityPosition(Player, true)
+    RequestAnimDict("veh@break_in@0h@p_m_one@") 
+    while not HasAnimDictLoaded("veh@break_in@0h@p_m_one@") do
+        Wait(10)
+    end
+    TaskPlayAnim(Player,"veh@break_in@0h@p_m_one@","low_force_entry_ds",1.0, -1.0, -1, 49, 0, 0, 0, 0)
+    Wait(5500)	
+    ClearPedTasks(Player)
+    FreezeEntityPosition(Player, false)
+    RemoveAnimDict("veh@break_in@0h@p_m_one@")
+end
